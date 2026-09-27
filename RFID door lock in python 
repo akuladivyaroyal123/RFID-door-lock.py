@@ -1,0 +1,41 @@
+# RFID Door Lock System in Python
+
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+import time
+
+reader = SimpleMFRC522()
+
+# Authorized RFID card UID
+AUTHORIZED_UID = 123456789
+
+print("===== RFID DOOR LOCK SYSTEM =====")
+print("Scan your RFID card...")
+
+try:
+    while True:
+        print("\nWaiting for RFID card...")
+
+        uid, text = reader.read()
+
+        print("Card UID:", uid)
+
+        if uid == AUTHORIZED_UID:
+            print("Access Granted!")
+            print("Door Unlocked.")
+
+            # Keep door unlocked for 5 seconds
+            time.sleep(5)
+
+            print("Door Locked.")
+        else:
+            print("Access Denied!")
+            print("Unknown RFID Card.")
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("\nSystem stopped.")
+
+finally:
+    GPIO.cleanup()
